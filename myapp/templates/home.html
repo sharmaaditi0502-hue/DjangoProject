@@ -1,0 +1,315 @@
+{%load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coffee with ADITI</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Roboto',sans-serif; }
+body { background-color:#D2B48C; color:#333; scroll-behavior:smooth; }
+
+/* Header */
+header {
+  position: relative;
+  background: url('https://th.bing.com/th/id/OIP.WX8nIEQg-jzd-bJPsnV5UAHaEK?w=303&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3') no-repeat center/cover;
+  height:380px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  color:#fffaf3;
+  text-align:center;
+  overflow:hidden;
+}
+header::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  z-index:0;
+}
+header h1, header h2 { z-index:1; text-shadow:2px 2px 6px rgba(0,0,0,0.7); }
+header h1 { font-family:'Pacifico',cursive; font-size:3rem; }
+header h2 { font-size:1.3rem; margin-top:10px; font-style:italic }
+
+/* Nav */
+nav { position:absolute; top:20px; right:30px; z-index:2; }
+nav ul { display:flex; gap:20px; list-style:none; }
+nav ul li a {
+  color:#fffaf3; text-decoration:none; font-weight:bold; font-size:1rem;
+  padding:6px 12px; border-radius:10px; transition: background 0.3s, color 0.3s;
+}
+nav ul li a:hover { background-color:#6b3e26; color:#FFD7A0; }
+
+/* Coffee Cards */
+.cards-container {
+  display:flex; justify-content:space-around; flex-wrap:wrap;
+  padding:50px 20px; max-width:1200px; margin:0 auto;
+}
+.card {
+  background:#fffaf3; border-radius:15px; box-shadow:0 6px 12px rgba(0,0,0,0.15);
+  width:23%; min-width:250px; height:390px; text-align:center;
+  transition:transform 0.3s, opacity 0.8s ease;
+  opacity:0; transform:translateY(30px);
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.card:hover { transform:translateY(-5px); }
+.card img { width:100%; height:180px; object-fit:cover; border-radius:15px 15px 0 0; }
+.card h3 { margin:10px 0 5px; font-size:1.3rem; color:#6b3e26; text-transform:capitalize; }
+.card p { flex:1; padding:0 10px 10px; font-size:0.95rem; color:#555; }
+.card button {
+  margin-bottom:20px; padding:12px 25px; border:none; border-radius:25px;
+  background-color:#6b3e26; color:#fff; font-size:1rem; font-weight:bold;
+  width:70%; align-self:center; cursor:pointer; transition:background 0.3s, transform 0.2s;
+}
+.card button:hover { background-color:#4e2c1b; transform:scale(1.05); }
+
+/* Meet ADITI */
+.about-aditi {
+  background-color:#3E1E1E; padding:60px 20px; text-align:center; color:#FFD7A0;
+}
+.about-aditi h2 { font-family:'Pacifico',cursive; font-size:2.5rem; text-transform:uppercase; }
+.about-aditi img {
+  margin-top:30px; width:170px; height:170px; border-radius:40px;
+  box-shadow:0 0 25px rgba(255,215,160,0.8); border:3px solid #FFD7A0;
+  animation: float 3s ease-in-out infinite, glow 3s ease-in-out infinite alternate;
+}
+@keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+@keyframes glow { from{box-shadow:0 0 20px rgba(255,182,193,0.5);} to{box-shadow:0 0 40px rgba(255,215,160,0.9);} }
+.about-aditi p { margin-top:20px; max-width:700px; margin-left:auto; margin-right:auto; font-size:1.1rem; line-height:1.6; color:#FFECB3; }
+
+/* Gallery Section */
+.gallery { background:#fffaf3; padding:60px 20px; text-align:center; }
+.gallery h2 { font-family:'Pacifico',cursive; font-size:2.4rem; color:#6b3e26; margin-bottom:40px; }
+.gallery-container { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; }
+.gallery-item {
+  width:260px; height:200px; border-radius:15px; overflow:hidden;
+  box-shadow:0 6px 15px rgba(0,0,0,0.15); transition:transform 0.3s ease, box-shadow 0.3s ease;
+  position:relative;
+}
+.gallery-item img { width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease; }
+.gallery-item:hover img { transform:scale(1.1); }
+.gallery-item:hover { transform:translateY(-5px); box-shadow:0 8px 20px rgba(107,62,38,0.4); }
+.gallery-item::after {
+  content:"☕"; position:absolute; bottom:10px; right:10px;
+  background:#6b3e26; color:#FFD7A0; padding:5px 10px; border-radius:10px;
+  font-size:0.9rem; opacity:0.8;
+}
+
+/* Feedback */
+.feedback { background:#fef7e5; padding:70px 20px; text-align:center; }
+.feedback h2 { font-family:'Pacifico',cursive; font-size:2.3rem; color:#6b3e26; margin-bottom:40px; }
+.feedback-container { display:flex; flex-wrap:wrap; justify-content:center; gap:25px; }
+.feedback-card {
+  background:#fff; border-radius:20px; width:280px; padding:25px; box-shadow:0 6px 15px rgba(0,0,0,0.15);
+  transition:transform 0.3s ease;
+}
+.feedback-card:hover { transform:translateY(-8px); }
+.feedback-card img { width:70px; height:70px; border-radius:50%; border:3px solid #FFD7A0; box-shadow:0 0 10px rgba(255,215,160,0.8); }
+.feedback-card h3 { margin:12px 0 5px; color:#6b3e26; }
+.feedback-card p { font-size:0.95rem; color:#444; line-height:1.5; }
+.feedback-card span { font-size:0.9rem; color:#a67c52; }
+
+/* Let's Connect */
+.interactive-section {
+  background-color:#4B2E2A; padding:40px 20px; text-align:center; color:#FFD7A0;
+  display:flex; flex-direction:column; align-items:center; gap:20px; border-top-left-radius:60px; border-top-right-radius:60px;
+}
+.interactive-section h2 { font-family:'Pacifico',cursive; font-size:2rem; }
+.interactive-section p { max-width:600px; color:#FFE0B2; font-size:1.1rem; }
+.interactive-section .character { width:100px; border-radius:50%; margin-bottom:10px; box-shadow:0 0 25px rgba(255,215,160,0.7); animation:float 3s ease-in-out infinite, glow 3s ease-in-out infinite alternate; }
+.interactive-section form { display:flex; flex-direction:column; align-items:center; gap:12px; width:100%; max-width:400px; }
+.interactive-section input, .interactive-section textarea { padding:14px 18px; border-radius:15px; border:none; width:100%; font-size:1rem; }
+.interactive-section textarea { height:100px; resize:none; }
+.interactive-section button { padding:12px 25px; border-radius:25px; border:none; background-color:#6b3e26; color:#FFD7A0; font-weight:bold; cursor:pointer; transition:background 0.3s; }
+.interactive-section button:hover { background-color:#4e2c1b; }
+
+/* Footer */
+footer {
+  background-color:#6b3e26; color:#fffaf3; text-align:center; padding:60px 20px;
+  font-size:1.2rem; position:relative;
+}
+footer .footer-container { display:flex; flex-wrap:wrap; justify-content:space-around; gap:30px; max-width:1200px; margin:0 auto; }
+footer .footer-section { flex:1 1 200px; text-align:left; }
+footer h3 { font-family:'Pacifico',cursive; color:#FFD7A0; margin-bottom:15px; }
+footer ul { list-style:none; }
+footer ul li { margin-bottom:10px; }
+footer ul li a { color:#fffaf3; text-decoration:none; transition: color 0.3s; }
+footer ul li a:hover { color:#FFD7A0; }
+footer .contact-info p { margin-bottom:10px; font-size:0.95rem; }
+footer .newsletter input { padding:10px 15px; border-radius:15px; border:none; margin-right:10px; width:60%; }
+footer .newsletter button { padding:10px 20px; border:none; border-radius:15px; background:#FFD7A0; color:#6b3e26; font-weight:bold; cursor:pointer; transition:background 0.3s; }
+footer .newsletter button:hover { background:#ffecb3; }
+footer .social-icons { margin-top:20px; }
+footer .social-icons img { width:35px; margin:0 10px; transition:transform 0.3s; }
+footer .social-icons img:hover { transform:rotate(10deg) scale(1.1); }
+
+@media screen and (max-width:992px) {
+  .card { width:45%; height:auto; }
+  .gallery-item { width:45%; }
+  .feedback-card { width:45%; }
+}
+@media screen and (max-width:600px) {
+  .card { width:90%; height:auto; }
+  .gallery-item { width:90%; }
+  .feedback-card { width:90%; }
+  footer .footer-container { flex-direction:column; align-items:center; text-align:center; }
+  footer .newsletter input { width:80%; margin-bottom:10px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+  <ul>
+    <li><a href="{% url 'home' %}">Home</a></li>
+    <li><a href="{% url 'menu' %}">Menu</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'contact' %}">Contact</a></li>
+
+    {% if user.is_authenticated %}
+      <li>Welcome, {{ user.first_name }}</li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+      <li><a href="{% url 'login' %}">Login</a></li>
+      <li><a href="{% url 'signup' %}">Signup</a></li>
+    {% endif %}
+  </ul>
+</nav>
+
+  <h1>Coffee with ADITI....</h1>
+  <h2>Brewed with love, served with comfort.</h2>
+</header>
+
+<!-- Coffee Cards -->
+<section class="cards-container">
+  <div class="card">
+    <img src="https://th.bing.com/th/id/OIP.c-VRNefGr-5zPcIotodscAAAAA?w=291&h=181&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Espresso">
+    <h3>Espresso</h3>
+    <p>Strong and bold coffee to kickstart your day with a perfect caffeine punch.</p>
+    <button>Order Now</button>
+  </div>
+  <div class="card">
+    <img src="https://th.bing.com/th/id/OIP.4k4H-VWOWmi5hmxcWg8hXAHaEP?w=330&h=189&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Cappuccino">
+    <h3>Cappuccino</h3>
+    <p>Creamy and frothy delight — a cozy cup for relaxing moments with friends.</p>
+    <button>Order Now</button>
+  </div>
+  <div class="card">
+    <img src="https://th.bing.com/th/id/OIP.VT96wS-k6vLiEwuNKfaPiAHaE7?w=274&h=183&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Latte">
+    <h3>Latte</h3>
+    <p>Smooth blend of espresso and milk — simple, classic, and always satisfying.</p>
+    <button>Order Now</button>
+  </div>
+  <div class="card">
+    <img src="https://th.bing.com/th/id/OIP.0whwA4UlydkiBr5s6Z6c2gHaHa?w=189&h=190&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Mocha">
+    <h3>Mocha</h3>
+    <p>Chocolate‑infused coffee for your sweet tooth — a hug in a cup!</p>
+    <button>Order Now</button>
+  </div>
+</section>
+
+<!-- Meet ADITI -->
+<section class="about-aditi">
+  <h2>Meet ADITI</h2>
+  <img src="https://tse3.mm.bing.net/th/id/OIP.XgEkStNyuakUfEzBMICQKAHaHa?cb=ucfimgc2&pid=ImgDet&w=187&h=187&c=7&dpr=1.3&o=7&rm=3" alt="Cute Anime Girl">
+  <p>Hello coffee lovers! I’m ADITI 🌸💕 — your cheerful anime‑style coffee friend. Every cup I brew is mixed with joy and sprinkled with love. Sit back, sip slowly, and let’s make your day a little more magical ☕✨.</p>
+</section>
+
+<!-- Gallery Section -->
+<section class="gallery">
+  <h2>Our Coffee Gallery ☕✨</h2>
+  <div class="gallery-container">
+    <div class="gallery-item"><img src="https://tse3.mm.bing.net/th/id/OIP.pMDqQ19OtmrvjtoHyPSb0wHaLH?cb=ucfimgc2&pid=ImgDet&w=187&h=280&c=7&dpr=1.3&o=7&rm=3" alt="Coffee 1"></div>
+    <div class="gallery-item"><img src="https://tse3.mm.bing.net/th/id/OIP.Bie9A2Y5s6zmUMv_hmQhtQHaHa?cb=ucfimgc2&pid=ImgDet&w=187&h=187&c=7&dpr=1.3&o=7&rm=3" alt="Coffee 2"></div>
+    <div class="gallery-item"><img src="https://th.bing.com/th/id/OIP.v5FlI0jpaH9Qs13FiXwo5AHaLG?w=121&h=181&c=7&r=0&o=7&cb=ucfimgc2&dpr=1.3&pid=1.7&rm=3" alt="Coffee 3"></div>
+    <div class="gallery-item"><img src="https://th.bing.com/th/id/OIP.qZ1mImZJBLcsB9zUOuRaxQHaHa?w=163&h=180&c=7&r=0&o=7&cb=ucfimgc2&dpr=1.3&pid=1.7&rm=3" alt="Coffee 4"></div>
+    <div class="gallery-item"><img src="https://tse3.mm.bing.net/th/id/OIP.2cJEfsf2WRyZvCrceC7elAHaE8?cb=ucfimgc2&pid=ImgDet&w=187&h=124&c=7&dpr=1.3&o=7&rm=3" alt="Coffee 5"></div>
+  </div>
+</section>
+
+<!-- Feedback -->
+<section class="feedback">
+  <h2>What Our Customers Say 💬</h2>
+  <div class="feedback-container">
+    <div class="feedback-card">
+      <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="Customer 1">
+      <h3>Aya</h3>
+      <p>“The caramel latte here is magical! ☕✨ I love spending mornings here with cozy vibes.”</p>
+      <span>⭐⭐⭐⭐⭐</span>
+    </div>
+    <div class="feedback-card">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Customer 2">
+      <h3>Kai</h3>
+      <p>“A delightful spot for coffee lovers. ADITI makes every cup special!”</p>
+      <span>⭐⭐⭐⭐⭐</span>
+    </div>
+    <div class="feedback-card">
+      <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Customer 3">
+      <h3>Yumi</h3>
+      <p>“I feel like I’m in an anime café! The atmosphere is adorable and relaxing.”</p>
+      <span>⭐⭐⭐⭐⭐</span>
+    </div>
+  </div>
+</section>
+
+<!-- Let's Connect -->
+<section class="interactive-section">
+  <h2>Let's Connect ☕💌</h2>
+  <img class="character" src="https://tse3.mm.bing.net/th/id/OIP.XgEkStNyuakUfEzBMICQKAHaHa?cb=ucfimgc2&pid=ImgDet&w=187&h=187&c=7&dpr=1.3&o=7&rm=3" alt="ADITI Character">
+  <p>Drop me a message, and I’ll respond with a sprinkle of coffee magic! ✨</p>
+  <form method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-container">
+    <div class="footer-section">
+      <h3>Coffee with ADITI</h3>
+      <p>Serving joy, one cup at a time ☕✨</p>
+    </div>
+    <div class="footer-section">
+      <h3>Quick Links</h3>
+      <ul>
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'contact' %}">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-section contact-info">
+      <h3>Contact Us</h3>
+      <p>Email: hello@coffeewithaditi.com</p>
+      <p>Phone: +123 456 7890</p>
+    </div>
+  </div>
+  <div class="social-icons">
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook"></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" alt="Twitter"></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram"></a>
+  </div>
+  <p style="margin-top:20px;">&copy; 2025 Coffee with ADITI. All rights reserved.</p>
+</footer>
+
+<script>
+// Fade-in animation for cards
+const cards = document.querySelectorAll('.card');
+window.addEventListener('scroll', () => {
+  const triggerBottom = window.innerHeight / 5 * 4;
+  cards.forEach(card => {
+    const cardTop = card.getBoundingClientRect().top;
+    if(cardTop < triggerBottom) card.style.opacity = 1, card.style.transform = 'translateY(0)';
+  });
+});
+</script>
+
+</body>
+</html>

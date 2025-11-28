@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Order History - Coffee with Aditi</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #1e130c, #9a8478);
+    color: #f3e7de;
+    margin: 0;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #fff;
+  }
+  table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 40px auto;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  thead {
+    background: rgba(182, 124, 75, 0.7);
+  }
+  th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #b67c4b;
+    color: #fff;
+  }
+  tbody tr:hover {
+    background-color: rgba(182, 124, 75, 0.3);
+  }
+  th {
+    font-weight: 600;
+  }
+  .no-orders {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 1.2rem;
+    color: #d09763;
+  }
+  .back-home {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 12px 25px;
+    background: #b67c4b;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: background 0.3s ease;
+  }
+  .back-home:hover {
+    background: #d09763;
+  }
+</style>
+</head>
+<body>
+
+<h1>☕ Your Order History ☕</h1>
+
+<table id="order-history-table" style="display:none;">
+  <thead>
+    <tr>
+      <th>Date & Time</th>
+      <th>Customer Name</th>
+      <th>Email</th>
+      <th>Items Ordered</th>
+      <th>Total (₹)</th>
+    </tr>
+  </thead>
+  <tbody id="history-body"></tbody>
+</table>
+
+<p class="no-orders" id="no-orders-msg" style="display:none;">No past orders found.</p>
+
+<a href="{% url 'home' %}" class="back-home">🏠 Back to Home</a>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const history = JSON.parse(localStorage.getItem('order_history')) || [];
+    const table = document.getElementById('order-history-table');
+    const tbody = document.getElementById('history-body');
+    const noOrdersMsg = document.getElementById('no-orders-msg');
+
+    if (history.length === 0) {
+      noOrdersMsg.style.display = 'block';
+      table.style.display = 'none';
+      return;
+    }
+
+    // Show table and populate rows
+    table.style.display = 'table';
+    noOrdersMsg.style.display = 'none';
+
+    history.slice().reverse().forEach(order => {
+      const tr = document.createElement('tr');
+
+      // Items: create a small string like "Latte x2, Espresso x1"
+      const itemsSummary = order.items.map(i => `${i.name} x${i.qty}`).join(', ');
+
+      // Date and Time
+      const dateTime = order.date || 'N/A';
+
+      tr.innerHTML = `
+        <td>${dateTime}</td>
+        <td>${order.customer.name}</td>
+        <td>${order.customer.email}</td>
+        <td>${itemsSummary}</td>
+        <td>₹${parseFloat(order.total).toFixed(2)}</td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Successful - Coffee with Aditi</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #1e130c, #9a8478);
+    color: #f3e7de;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    text-align: center;
+    min-height: 100vh;
+    margin: 0;
+}
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #fff;
+    margin: 20px 0 10px;
+}
+p {
+    font-size: 1.1rem;
+    color: #f8ede3;
+    margin-bottom: 25px;
+}
+.success-icon {
+    font-size: 4rem;
+    color: #b67c4b;
+    animation: pop 0.6s ease-in-out;
+}
+@keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Summary box */
+.summary-container {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 25px;
+    width: 100%;
+    max-width: 750px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #fff;
+    border-bottom: 1px solid #b67c4b;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+.customer-details {
+    text-align: left;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+.customer-details strong {
+    color: #d5b895;
+}
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #b67c4b;
+    text-align: left;
+}
+th {
+    color: #fff;
+    background: rgba(182, 124, 75, 0.3);
+}
+.total {
+    text-align: right;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 10px;
+}
+
+/* Buttons */
+.btn-group {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+}
+button {
+    padding: 12px 25px;
+    background: #b67c4b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+button:hover {
+    background: #d09763;
+}
+
+.footer {
+    margin-top: 50px;
+    font-size: 0.9rem;
+    color: #cfc2b0;
+}
+
+/* Order History */
+#order-history {
+    margin-top: 50px;
+    max-width: 750px;
+    width: 100%;
+    text-align: left;
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 10px;
+}
+.history-item {
+    border-bottom: 1px solid #b67c4b;
+    padding: 10px 0;
+}
+.history-item:last-child {
+    border-bottom: none;
+}
+.history-item p {
+    margin: 5px 0;
+}
+</style>
+</head>
+<body>
+
+<div class="success-icon">✔️</div>
+<h1>Order Placed Successfully!</h1>
+<p>Thank you for your order. Your coffee is being brewed with love ☕💛</p>
+
+<!-- Order Summary -->
+<div class="summary-container" id="order-summary" style="display:none;">
+    <div class="customer-details">
+        <div class="section-title">Customer Details</div>
+        <p><strong>Name:</strong> <span id="cust-name"></span></p>
+        <p><strong>Email:</strong> <span id="cust-email"></span></p>
+        <p><strong>Phone:</strong> <span id="cust-phone"></span></p>
+        <p><strong>Address:</strong> <span id="cust-address"></span></p>
+    </div>
+
+    <div class="order-details">
+        <div class="section-title">Order Summary</div>
+        <table>
+            <thead>
+                <tr><th>Item</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr>
+            </thead>
+            <tbody id="summary-body"></tbody>
+        </table>
+        <div class="total" id="summary-total"></div>
+    </div>
+</div>
+
+<!-- Buttons -->
+<div class="btn-group">
+    <button onclick="downloadReceipt()">📄 Download Receipt</button>
+    <button onclick="goHome()">🏠 Back to Home</button>
+</div>
+
+<!-- Order History -->
+<div id="order-history" style="display:none;">
+    <div class="section-title">Order History</div>
+    <div id="history-list"></div>
+</div>
+
+<div class="footer">© 2025 Coffee with Aditi</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function goHome() {
+    window.location.href = "{% url 'home' %}";
+}
+
+function downloadReceipt() {
+    const element = document.getElementById('order-summary');
+    const options = {
+        margin: 0.5,
+        filename: 'Coffee_with_Aditi_Receipt.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(options).from(element).save();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const lastOrder = JSON.parse(localStorage.getItem('last_order'));
+    if (!lastOrder) return;
+
+    // Show order summary
+    const summaryDiv = document.getElementById('order-summary');
+    const tbody = document.getElementById('summary-body');
+    const totalDiv = document.getElementById('summary-total');
+
+    document.getElementById('cust-name').innerText = lastOrder.customer.name;
+    document.getElementById('cust-email').innerText = lastOrder.customer.email;
+    document.getElementById('cust-phone').innerText = lastOrder.customer.phone;
+    document.getElementById('cust-address').innerText = lastOrder.customer.address;
+
+    lastOrder.items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.name}</td>
+            <td>${item.qty}</td>
+            <td>₹${item.price.toFixed(2)}</td>
+            <td>₹${(item.qty * item.price).toFixed(2)}</td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    totalDiv.textContent = `Total: ₹${parseFloat(lastOrder.total).toFixed(2)}`;
+    summaryDiv.style.display = 'block';
+
+    // Save this order to history
+    saveToOrderHistory(lastOrder);
+    saveOrderToBackend(lastOrder);
+    // Show history
+    displayOrderHistory();
+
+    // Clear temporary order data
+    setTimeout(() => localStorage.removeItem('last_order'), 5000);
+});
+
+function saveToOrderHistory(order) {
+    let history = JSON.parse(localStorage.getItem('order_history')) || [];
+    const timestamp = new Date().toLocaleString();
+    order.date = timestamp;
+    history.push(order);
+    localStorage.setItem('order_history', JSON.stringify(history));
+}
+
+function displayOrderHistory() {
+    const history = JSON.parse(localStorage.getItem('order_history')) || [];
+    const historyContainer = document.getElementById('order-history');
+    const historyList = document.getElementById('history-list');
+
+    if (history.length === 0) return;
+
+    historyContainer.style.display = 'block';
+    historyList.innerHTML = '';
+
+    history.slice().reverse().forEach(order => {
+        const div = document.createElement('div');
+        div.classList.add('history-item');
+        div.innerHTML = `
+            <p><strong>${order.date}</strong></p>
+            <p>${order.customer.name} — ₹${order.total}</p>
+            <p><em>${order.items.length} item(s)</em></p>
+        `;
+        historyList.appendChild(div);
+    });
+}
+function saveOrderToBackend(order) {
+    fetch('/api/create-order/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            customer_name: order.customer.name,
+            customer_email: order.customer.email,
+            customer_phone: order.customer.phone,
+            customer_address: order.customer.address,
+            items: order.items.map(i => ({
+                name: i.name,
+                quantity: i.qty,
+                price: i.price
+            }))
+        })
+    })
+    .then(response => response.json())
+    .then(data => console.log("Order Saved to Backend:", data))
+    .catch(error => console.error("Error saving order:", error));
+}
+
+</script>
+
+</body>
+</html>

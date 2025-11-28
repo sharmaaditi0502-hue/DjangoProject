@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2e6d9; /* light coffee */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            display: flex;
+            background: #6f4e37; /* dark coffee */
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            width: 800px;
+            max-width: 90%;
+        }
+
+        .image-section {
+            flex: 1;
+            background: url('https://png.pngtree.com/png-vector/20250825/ourlarge/pngtree-flat-style-illustration-of-a-steaming-cup-coffee-with-brown-autumn-vector-png-image_17172379.webp') no-repeat center center;
+            background-size: cover;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 40px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .form-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-section input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .form-section button {
+            padding: 10px 20px;
+            background: #d2b48c;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .form-section button:hover {
+            background: #c49b70;
+        }
+
+        .form-section a {
+            color: #f5f5dc;
+            font-weight: bold;
+        }
+
+        .message {
+            color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="image-section"></div>
+        <div class="form-section">
+            <h2>Create Your Account</h2>
+            <form method="POST" action="{% url 'signup' %}">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password1" placeholder="Password" required>
+                <input type="password" name="password2" placeholder="Confirm Password" required>
+                <button type="submit">Signup</button>
+            </form>
+            <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li class="message">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

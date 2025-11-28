@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(120deg, #f2e6d9, #d2b48c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            background: #6f4e37;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            text-align: center;
+            width: 400px;
+        }
+
+        .login-container .avatar img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 2px solid #fff;
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .login-container input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+        }
+
+        .login-container button {
+            padding: 12px 25px;
+            background: #d2b48c;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .login-container button:hover {
+            background: #c49b70;
+        }
+
+        .login-container a {
+            color: #f5f5dc;
+            font-weight: bold;
+        }
+
+        .message {
+            color: #ffd700;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="avatar">
+            <img src="https://tse4.mm.bing.net/th/id/OIP.aWtVQtwabDc-dU7l5xFYYwHaHa?cb=ucfimgc2&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Anime Avatar">
+        </div>
+        <h2>Welcome Back</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{% url 'signup' %}">Signup</a></p>
+
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="message">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

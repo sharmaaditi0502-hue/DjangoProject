@@ -1,0 +1,208 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Coffee with Aditi ☕</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:#1e130c;color:#f3e7de;overflow-x:hidden}
+h1,h2,h3{font-family:'Playfair Display',serif;color:#f3e7de;text-align:center;letter-spacing:1px}
+p{max-width:850px;margin:10px auto;line-height:1.6;font-size:1.05rem;color:#e8d7c3;text-align:center}
+a{text-decoration:none;color:#f3e7de;transition:0.3s}
+a:hover{color:#d09763}
+
+/* Navbar Styles */
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:15px 30px;background:#2e1c12;position:sticky;top:0;z-index:1000;box-shadow:0 4px 10px rgba(0,0,0,0.3)}
+.navbar .logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:#d09763;font-weight:600}
+.navbar ul{display:flex;gap:25px;list-style:none}
+.navbar ul li{position:relative}
+.navbar ul li a{color:#f3e7de;font-weight:500}
+.navbar ul li a:hover{color:#d09763}
+.navbar-toggle{display:none;flex-direction:column;cursor:pointer}
+.navbar-toggle span{height:3px;width:25px;background:#f3e7de;margin:4px 0;border-radius:2px}
+
+/* Hero Section */
+.contact-hero{
+background:linear-gradient(rgba(30,19,12,0.75),rgba(30,19,12,0.75)),url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1950&q=80');
+background-size:cover;background-position:center;text-align:center;padding:160px 20px;position:relative
+}
+.contact-hero img{position:absolute;right:40px;bottom:40px;width:140px;border-radius:50%;border:3px solid #b5835a;box-shadow:0 0 20px rgba(0,0,0,0.6)}
+.contact-hero h1{font-size:3rem;margin-bottom:12px;text-shadow:1px 1px 6px #000}
+.contact-hero p{font-size:1.2rem;max-width:650px;margin:0 auto;text-shadow:1px 1px 5px #000}
+
+/* Contact Form Section */
+.contact-form-section{background:#2e1c12;padding:60px 20px;border-radius:14px;max-width:700px;margin:60px auto;box-shadow:0 8px 20px rgba(0,0,0,0.4);text-align:center}
+.contact-form-section h2{margin-bottom:30px;font-size:2.4rem}
+.contact-form-section form{display:flex;flex-direction:column;gap:20px}
+.contact-form-section input,.contact-form-section textarea,.contact-form-section select{padding:12px;border-radius:8px;border:none;font-size:1rem;font-family:'Poppins',sans-serif;background:#3c2518;color:#f3e7de}
+.contact-form-section textarea{resize:none;height:150px}
+.contact-form-section button{padding:12px 25px;background:#b67c4b;color:white;border:none;border-radius:6px;cursor:pointer;font-size:1rem;transition:all 0.3s}
+.contact-form-section button:hover{background:#d09763;transform:scale(1.05);box-shadow:0 6px 12px rgba(0,0,0,0.4)}
+
+/* Branding Section */
+.branding-section{text-align:center;margin:60px 0}
+.branding-section img{width:200px;border-radius:50%;border:4px solid #b67c4b;box-shadow:0 0 25px rgba(182,124,75,0.6)}
+.branding-section h2{margin-top:20px;font-size:2rem;color:#d09763}
+
+/* FAQ Section */
+.faq-section{background:#3b2418;padding:60px 20px;border-radius:14px;max-width:850px;margin:60px auto;box-shadow:0 8px 20px rgba(0,0,0,0.4)}
+.faq-section h2{margin-bottom:25px;font-size:2.3rem}
+.faq{margin-bottom:20px;text-align:left}
+.faq h3{font-size:1.2rem;color:#d09763;cursor:pointer;margin-bottom:8px}
+.faq p{display:none;font-size:0.95rem;color:#e8d7c3;text-align:left;padding-left:5px}
+.faq.active p{display:block}
+
+/* Contact Info */
+.contact-info{text-align:center;margin-top:40px}
+.contact-info p{margin-bottom:10px;font-size:1.1rem}
+
+/* Popup */
+.popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#b67c4b;color:white;padding:30px 50px;border-radius:12px;font-size:1.2rem;z-index:1000;box-shadow:0 10px 25px rgba(0,0,0,0.5);text-align:center}
+.popup.show{display:block;animation:fadeinout 3s forwards}
+@keyframes fadeinout{0%{opacity:0}10%{opacity:1}90%{opacity:1}100%{opacity:0}}
+
+/* Chat Box */
+.chat-box{position:fixed;bottom:25px;right:25px;background:#3c2518;border:2px solid #b67c4b;border-radius:14px;width:300px;box-shadow:0 6px 18px rgba(0,0,0,0.4);overflow:hidden;z-index:999}
+.chat-header{background:#b67c4b;color:white;padding:12px;font-weight:600;text-align:center}
+.chat-messages{height:220px;padding:10px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.chat-msg{padding:10px 14px;border-radius:10px;max-width:75%;font-size:0.9rem}
+.chat-msg.user{align-self:flex-end;background:#d09763;color:white}
+.chat-msg.bot{align-self:flex-start;background:#3b2418;color:#f3e7de}
+.chat-input{display:flex}
+.chat-input input{flex:1;padding:10px;border:none;outline:none;background:#2e1c12;color:#f3e7de}
+.chat-input button{background:#b67c4b;border:none;color:white;padding:10px 15px;cursor:pointer;transition:0.3s}
+.chat-input button:hover{background:#d09763}
+
+/* Responsive */
+@media(max-width:768px){
+  .contact-form-section{padding:40px 15px}
+  .chat-box{width:260px}
+  .navbar ul{display:none;flex-direction:column;background:#2e1c12;position:absolute;top:60px;right:0;width:200px;border-radius:0 0 0 10px;overflow:hidden}
+  .navbar ul.active{display:flex}
+  .navbar-toggle{display:flex}
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="logo">Coffee with Aditi ☕</div>
+  <div class="navbar-toggle" id="navbarToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+  <ul id="navbarMenu">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about/">About</a></li>
+    <li><a href="/menu/">Menu</a></li>
+    <li><a href="/contact/">Contact</a></li>
+    <li><a href="/signup/">signup</a></li>
+    <li><a href="/login/">login</a></li>
+  </ul>
+</nav>
+
+<section class="contact-hero">
+  <h1>Contact Coffee with Aditi ☕</h1>
+  <p>We’d love to hear from you! Share your thoughts, ideas, or just say hi.</p>
+  <img src="https://th.bing.com/th/id/OIP.UPwgB97RCosgJSKjlt4QeQHaFp?w=189&h=180&c=7&r=0&o=7&cb=ucfimgc2&dpr=1.3&pid=1.7&rm=3" alt="Coffee Image">
+</section>
+
+<section class="branding-section">
+  <img src="https://th.bing.com/th/id/OIP.n-pE815fQrNCg6s00TXhoQHaEK?w=296&h=180&c=7&r=0&o=7&cb=ucfimgc2&dpr=1.3&pid=1.7&rm=3" alt="Brand Logo">
+  <h2>Let's Brew a Connection</h2>
+  <p>Reach out to us for collaborations, inquiries, or a simple hello over coffee.</p>
+</section>
+
+<section class="contact-form-section">
+  <h2>Send Us a Message</h2>
+  <form id="contactForm" action="/contact/" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="email" placeholder="Your Email" required>
+    <select name="callback" required>
+      <option value="">Preferred Callback Time</option>
+      <option>Morning (9AM - 12PM)</option>
+      <option>Afternoon (12PM - 4PM)</option>
+      <option>Evening (4PM - 8PM)</option>
+    </select>
+    <textarea name="message" placeholder="Your Message" required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+<section class="faq-section">
+  <h2>Frequently Asked Questions ☕</h2>
+  <div class="faq"><h3>Do you host coffee workshops?</h3><p>Yes! We host weekend workshops on latte art and brewing basics.</p></div>
+  <div class="faq"><h3>Where are you located?</h3><p>We’re in Caffeine City, Dreamland — a cozy corner for coffee lovers.</p></div>
+  <div class="faq"><h3>Can we book the café for events?</h3><p>Absolutely! We love private events. Reach out with your details.</p></div>
+</section>
+
+<section class="contact-info">
+  <h2>Other Ways to Connect</h2>
+  <p>Email: <a href="mailto:contact@coffeewithaditi.com">contact@coffeewithaditi.com</a></p>
+  <p>Phone: <a href="tel:+1234567890">+1 234 567 890</a></p>
+  <p>Address: 123 Coffee Street, Caffeine City, Dreamland</p>
+</section>
+
+<div id="popup" class="popup">Message Sent Successfully! Redirecting to Home... ☕</div>
+
+<div class="chat-box" id="chatBox">
+  <div class="chat-header">Chat with Aditi ☕</div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Type your message...">
+    <button id="chatSend">➤</button>
+  </div>
+</div>
+
+<script>
+// Navbar toggle for mobile
+const navbarToggle = document.getElementById('navbarToggle');
+const navbarMenu = document.getElementById('navbarMenu');
+navbarToggle.addEventListener('click',()=>{navbarMenu.classList.toggle('active');});
+
+// Contact form popup
+document.getElementById('contactForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var popup=document.getElementById('popup');
+  popup.classList.add('show');
+  setTimeout(function(){
+    popup.classList.remove('show');
+    window.location.href='/';
+  },3000);
+});
+
+// FAQ toggle
+document.querySelectorAll('.faq h3').forEach(f=>{f.addEventListener('click',()=>{f.parentElement.classList.toggle('active')})});
+
+// Chat box
+const chatMessages=document.getElementById('chatMessages');
+const chatInput=document.getElementById('chatInput');
+const chatSend=document.getElementById('chatSend');
+
+function addMsg(msg,type){
+  let div=document.createElement('div');
+  div.className='chat-msg '+type;
+  div.innerText=msg;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+
+chatSend.addEventListener('click',()=>{
+  let msg=chatInput.value.trim();
+  if(!msg)return;
+  addMsg(msg,'user');
+  chatInput.value='';
+  setTimeout(()=>{addMsg('Aditi: Thanks for reaching out! Our team will respond soon ☕','bot');},1000);
+});
+
+chatInput.addEventListener('keypress',e=>{if(e.key==='Enter'){chatSend.click()}});
+
+</script>
+</body>
+</html>

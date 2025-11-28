@@ -1,0 +1,232 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Menu - Coffee with Aditi</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Poppins',sans-serif;background:#1e130c;color:#f3e7de;}
+h1,h2,h3{font-family:'Playfair Display',serif;color:#f3e7de;text-align:center;letter-spacing:1px;}
+p{color:#e8d7c3;text-align:center;line-height:1.6;font-size:1rem;}
+a{text-decoration:none;color:#f3e7de;}
+a:hover{color:#d09763;}
+section{padding:70px 20px;}
+nav{position:fixed;top:0;left:0;width:100%;background:rgba(30,19,12,0.95);display:flex;justify-content:space-between;align-items:center;padding:15px 50px;z-index:1000;box-shadow:0 4px 10px rgba(0,0,0,0.5);}
+nav .logo{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:600;}
+nav ul{display:flex;list-style:none;gap:25px;}
+nav ul li a{color:#f3e7de;font-weight:500;transition:color .3s;}
+nav ul li a:hover{color:#d09763;}
+#cart-btn{background:#b67c4b;padding:10px 16px;border-radius:6px;color:#fff;cursor:pointer;position:relative;font-weight:600;transition:background .3s; border:none;}
+#cart-btn:hover{background:#d09763;}
+#cart-count{position:absolute;top:-6px;right:-6px;background:red;color:white;font-size:0.8rem;padding:2px 6px;border-radius:50%;}
+.hero{background:linear-gradient(rgba(30,19,12,0.7),rgba(30,19,12,0.7)),url('https://static.vecteezy.com/system/resources/previews/025/282/026/non_2x/stock-of-mix-a-cup-coffee-latte-more-motive-top-view-foodgraphy-generative-ai-photo.jpg') no-repeat center/cover;text-align:center;padding:180px 20px 120px 20px;margin-top:70px;}
+.hero h1{font-size:3.5rem;text-shadow:1px 1px 6px #000;margin-bottom:15px;}
+.hero p{font-size:1.2rem;text-shadow:1px 1px 5px #000;max-width:650px;margin:0 auto;}
+.menu-section{background:#2e1c12;margin:60px auto;border-radius:12px;max-width:1100px;box-shadow:0 8px 25px rgba(0,0,0,0.4);padding:50px 30px;}
+.menu-section h2{font-size:2.6rem;margin-bottom:35px;text-transform:uppercase;border-bottom:3px solid #b67c4b;display:inline-block;padding-bottom:5px;}
+.menu-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:25px;margin-top:30px;}
+.menu-card{background:#3c2518;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.35);padding:15px;text-align:center;transition:all .3s ease;}
+.menu-card:hover{transform:scale(1.05);box-shadow:0 12px 28px rgba(0,0,0,0.5);}
+.menu-card img{width:100%;height:200px;border-radius:10px;object-fit:cover;margin-bottom:12px;filter:brightness(0.9);transition:transform .4s ease,box-shadow .4s ease;}
+.menu-card:hover img{transform:scale(1.08);box-shadow:0 10px 25px rgba(255,200,150,0.4);}
+.menu-card h3{font-size:1.3rem;margin-bottom:8px;}
+.menu-card p{font-size:0.95rem;margin-bottom:10px;}
+.menu-card button{padding:10px 22px;background:#b67c4b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;transition:background .3s,transform .3s;}
+.menu-card button:hover{background:#d09763;transform:scale(1.05);}
+footer{text-align:center;padding:40px 0;background:#2e1c12;}
+footer a{display:inline-block;padding:10px 20px;background:#b67c4b;border-radius:6px;color:#fff;margin-top:10px;}
+footer a:hover{background:#d09763;}
+#cart-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;z-index:2000;}
+#cart-modal .cart-content{background:#2e1c12;padding:30px;border-radius:12px;width:90%;max-width:500px;color:#f3e7de;position:relative;}
+#cart-modal .close-cart{position:absolute;top:15px;right:20px;cursor:pointer;font-size:1.3rem;color:#fff;}
+#cart-items{margin-top:20px;max-height:300px;overflow-y:auto;}
+#cart-items div{display:flex;justify-content:space-between;margin-bottom:10px;font-size:1rem;align-items:center;}
+.cart-actions button{margin-left:5px;padding:2px 6px;background:#b67c4b;color:#fff;border:none;border-radius:4px;cursor:pointer;}
+.cart-actions button:hover{background:#d09763;}
+#cart-total{margin-top:15px;font-weight:600;font-size:1.2rem;text-align:right;}
+#checkout-btn{margin-top:15px;width:100%;padding:10px 0;background:#b67c4b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:1rem;}
+#checkout-btn:hover{background:#d09763;}
+@media(max-width:992px){.menu-cards{grid-template-columns:repeat(2,1fr);} nav{padding:15px 30px;}}
+@media(max-width:768px){.menu-cards{grid-template-columns:1fr;} nav ul{flex-direction:column;gap:15px;}}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="logo">Coffee with Aditi</div>
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/menu">Menu</a></li>
+<li><a href="/about">About</a></li>
+<li><a href="/contact">Contact</a></li>
+</ul>
+<button id="cart-btn">Cart 🛒 <span id="cart-count">0</span></button>
+</nav>
+
+<section class="hero">
+<h1>Our Menu</h1>
+<p>Delight in every sip — crafted with passion, served with warmth.</p>
+</section>
+
+<section class="menu-section">
+<h2>Hot Coffees</h2>
+<div class="menu-cards">
+<div class="menu-card" data-price="3.5">
+<img src="https://tse3.mm.bing.net/th/id/OIP.MwJDepKqNQ_Fo7RglZEicQHaHa?cb=ucfimgc2&pid=ImgDet&w=187&h=187&c=7&dpr=1.3&o=7&rm=3" alt="Espresso">
+<h3>Espresso</h3><p>Bold and intense flavor that fuels your mornings.</p>
+<button class="add-cart">Add to Cart - $3.50</button>
+</div>
+<div class="menu-card" data-price="4.0">
+<img src="https://tse2.mm.bing.net/th/id/OIP.fgn-YBhwtjeSPtTErfcx1gHaLH?cb=ucfimgc2&pid=ImgDet&w=187&h=280&c=7&dpr=1.3&o=7&rm=3" alt="Cappuccino">
+<h3>Cappuccino</h3><p>Creamy froth with a perfect espresso base.</p>
+<button class="add-cart">Add to Cart - $4.00</button>
+</div>
+<div class="menu-card" data-price="4.5">
+<img src="https://tse1.mm.bing.net/th/id/OIP.LC63ClbPedNOr7BOLwSy_QAAAA?cb=ucfimgc2&pid=ImgDet&w=184&h=276&c=7&dpr=1.3&o=7&rm=3" alt="Mocha">
+<h3>Mocha</h3><p>Chocolate meets coffee — a match made in heaven.</p>
+<button class="add-cart">Add to Cart - $4.50</button>
+</div>
+</div>
+</section>
+
+<section class="menu-section">
+<h2>Cold Brews</h2>
+<div class="menu-cards">
+<div class="menu-card" data-price="4.5">
+<img src="https://tse4.mm.bing.net/th/id/OIP.hyW9cOm_P1fTba5dEtS4tQAAAA?cb=ucfimgc2&pid=ImgDet&w=184&h=276&c=7&dpr=1.3&o=7&rm=3" alt="Classic Cold Brew">
+<h3>Classic Cold Brew</h3><p>Smooth, refreshing, perfect chilled coffee.</p>
+<button class="add-cart">Add to Cart - $4.50</button>
+</div>
+<div class="menu-card" data-price="5.0">
+<img src="https://tse2.mm.bing.net/th/id/OIP.yQXZ8wiREicqtF65KnZoKAHaHa?cb=ucfimgc2&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Vanilla Cold Brew">
+<h3>Vanilla Cold Brew</h3><p>Cold brew coffee infused with vanilla flavor.</p>
+<button class="add-cart">Add to Cart - $5.00</button>
+</div>
+<div class="menu-card" data-price="5.5">
+<img src="https://tse3.mm.bing.net/th/id/OIP.BWvG1PIUETb9aaOg-GZVZQHaHa?cb=ucfimgc2&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Caramel Cold Brew">
+<h3>Caramel Cold Brew</h3><p>Sweet caramel blended with smooth cold brew.</p>
+<button class="add-cart">Add to Cart - $5.50</button>
+</div>
+</div>
+</section>
+
+<section class="menu-section">
+<h2>Desserts</h2>
+<div class="menu-cards">
+<div class="menu-card" data-price="3.0">
+<img src="https://tse4.mm.bing.net/th/id/OIP.n0kCW_xgefrK61LrBSDsDQAAAA?cb=ucfimgc2&pid=ImgDet&w=184&h=276&c=7&dpr=1.3&o=7&rm=3" alt="Chocolate Cake">
+<h3>Chocolate Cake</h3><p>Rich and moist chocolate cake for sweet cravings.</p>
+<button class="add-cart">Add to Cart - $3.00</button>
+</div>
+<div class="menu-card" data-price="2.5">
+<img src="https://tse2.mm.bing.net/th/id/OIP.CpJD5DKhCpSgnYoXOI94mwAAAA?cb=ucfimgc2&pid=ImgDet&w=184&h=328&c=7&dpr=1.3&o=7&rm=3" alt="Cheesecake">
+<h3>Cheesecake</h3><p>Creamy cheesecake with buttery crust.</p>
+<button class="add-cart">Add to Cart - $2.50</button>
+</div>
+<div class="menu-card" data-price="3.5">
+<img src="https://tse1.explicit.bing.net/th/id/OIP.IbTYZrWg0Uue87Oiejz7MQHaHa?cb=ucfimgc2&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Tiramisu">
+<h3>Tiramisu</h3><p>Classic Italian dessert with coffee flavor.</p>
+<button class="add-cart">Add to Cart - $3.50</button>
+</div>
+</div>
+</section>
+
+<section class="menu-section">
+<h2>Specials</h2>
+<div class="menu-cards">
+<div class="menu-card" data-price="6.0">
+<img src="https://tse4.mm.bing.net/th/id/OIP.3ifU4_Z_Npv37Xd5CVwlcQHaLH?cb=ucfimgc2&pid=ImgDet&w=187&h=280&c=7&dpr=1.3&o=7&rm=3" alt="Pumpkin Spice Latte">
+<h3>Pumpkin Spice Latte</h3><p>Seasonal favorite with cinnamon and pumpkin spices.</p>
+<button class="add-cart">Add to Cart - $6.00</button>
+</div>
+<div class="menu-card" data-price="5.5">
+<img src="https://tse4.mm.bing.net/th/id/OIP.jEwI2w2LO7lpgLdEvB6EMgHaHa?cb=ucfimgc2&pid=ImgDet&w=184&h=184&c=7&dpr=1.3&o=7&rm=3" alt="Iced Matcha Latte">
+<h3>Iced Matcha Latte</h3><p>Green tea matcha combined with milk and ice.</p>
+<button class="add-cart">Add to Cart - $5.50</button>
+</div>
+<div class="menu-card" data-price="6.5">
+<img src="https://tse1.mm.bing.net/th/id/OIP.LC63ClbPedNOr7BOLwSy_QAAAA?cb=ucfimgc2&pid=ImgDet&w=184&h=276&c=7&dpr=1.3&o=7&rm=3" alt="Affogato">
+<h3>Affogato</h3><p>Espresso poured over vanilla ice cream — divine!</p>
+<button class="add-cart">Add to Cart - $6.50</button>
+</div>
+</div>
+</section>
+
+<div id="cart-modal">
+<div class="cart-content">
+<span class="close-cart">&times;</span>
+<h2>Your Cart</h2>
+<div id="cart-items"></div>
+<div id="cart-total">Total: $0.00</div>
+<div class="cart-summary">
+   
+    <button id="checkout-btn" class="checkout-btn">Checkout</button>
+</div>
+</div>
+</div>
+
+<footer>
+<a href="/">← Back to Home</a>
+<p>© 2025 Coffee with Aditi — Brewed with Love ☕</p>
+</footer>
+
+<script>
+let cart=[];
+const cartBtn=document.getElementById('cart-btn');
+const cartModal=document.getElementById('cart-modal');
+const closeCart=document.querySelector('.close-cart');
+const cartItemsContainer=document.getElementById('cart-items');
+const cartCount=document.getElementById('cart-count');
+const cartTotalEl=document.getElementById('cart-total');
+
+function updateCartUI(){
+cartItemsContainer.innerHTML='';
+let total=0;
+cart.forEach(item=>{
+const div=document.createElement('div');
+div.innerHTML=`<span>${item.name} x ${item.qty}</span><span>$${(item.price*item.qty).toFixed(2)}</span><span class="cart-actions"><button class="inc">+</button><button class="dec">-</button><button class="remove">x</button></span>`;
+cartItemsContainer.appendChild(div);
+div.querySelector('.inc').addEventListener('click',()=>{item.qty++;updateCartUI();});
+div.querySelector('.dec').addEventListener('click',()=>{item.qty>1?item.qty--:cart.splice(cart.indexOf(item),1);updateCartUI();});
+div.querySelector('.remove').addEventListener('click',()=>{cart.splice(cart.indexOf(item),1);updateCartUI();});
+total+=item.price*item.qty;
+});
+cartTotalEl.innerText=`Total: $${total.toFixed(2)}`;
+cartCount.innerText=cart.reduce((acc,item)=>acc+item.qty,0);
+}
+
+document.querySelectorAll('.add-cart').forEach(button=>{
+button.addEventListener('click', e=>{
+const card=button.closest('.menu-card');
+const name=card.querySelector('h3').innerText;
+const price=parseFloat(card.dataset.price);
+const existing=cart.find(i=>i.name===name);
+if(existing){existing.qty+=1;}else{cart.push({name,price,qty:1});}
+updateCartUI();
+});
+});
+
+cartBtn.addEventListener('click',()=>{cartModal.style.display='flex';});
+closeCart.addEventListener('click',()=>{cartModal.style.display='none';});
+window.addEventListener('click',e=>{if(e.target==cartModal){cartModal.style.display='none';}});
+
+document.getElementById('checkout-btn').addEventListener('click', () => {
+    // Save cart to localStorage
+    localStorage.setItem('cart', JSON.stringify(cart));
+    let total = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+    localStorage.setItem('total', total.toFixed(2));
+
+    // Close the cart modal
+    cartModal.style.display = 'none';
+
+    // Redirect directly to billing page
+    window.location.href = "{% url 'billing' %}";
+});
+
+</script>
+
+</body>
+</html>
